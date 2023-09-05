@@ -1,0 +1,59 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Aforum.Models.User
+@{
+    ViewData["Title"] = "Topic";
+       
+}
+
+<div>
+    <h1 class="display-4">Створення нової теми</h1>
+</div>
+
+@if (ViewData["form"] != null)
+{
+
+    // needSaveValues = true;
+    <div class="alert alert-danger" role="alert">@ViewData["form"]</div>
+
+}
+
+<div class="row">
+    <div class="col col-8">
+        <form asp-action="Topic" enctype="multipart/form-data" method="post">
+            <label for="user-topicname" class="form-label">Назва теми</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text py-0 px-2" id="user-login-addon">
+                    <i class="bi-person fs-bi"></i>
+                </span>
+                <input type="text" class="form-control" id="user-topicname" name="user-topicname">
+            </div>
+
+            <label for="user-description" class="form-label">Опис теми</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text py-0 px-2" id="user-description-addon">
+                    <i class="bi-file-earmark-text fs-bi"></i>
+                </span>
+                <textarea class="form-control" id="user-description" name="user-description"></textarea>
+            </div>
+
+            <label for="user-PhotoFileName" class="form-label">Фотографія</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text py-0 px-2" id="user-PhotoFileName-addon">
+                    <i class="bi-person-circle fs-bi"></i>
+                </span>
+                <input type="file" class="form-control custom-file-input" id="user-PhotoFileName" name="user-PhotoFileName">
+            </div>
+            <label for="user-PhotoPassword" class="form-label">Введіть пароль</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text py-0 px-2" id="user-PhotoPassword-addon">
+                    <i class="bi-file-earmark-text fs-bi"></i>
+                </span>
+                <input class="form-control" id="user-PhotoPassword" name="user-PhotoPassword">
+            </div>
+
+            <button type="submit" class="btn btn-primary ms-auto">Додати нову тему</button>
+        </form>
+    </div>
+</div>
+
+

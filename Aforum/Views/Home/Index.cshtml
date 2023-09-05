@@ -1,0 +1,83 @@
+﻿@using Aforum.Models.User;
+@model List<UserSignupModel>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using System.Security.Claims;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-5">
+    @if (Model.Count > 0)
+    {
+        @foreach (var topic in Model.SelectMany(feedback => feedback.Topics).OrderByDescending(t => t.CreatedAtTopic))
+        {
+            <div class="card mb-3  text-white" style="border-radius: 20px; background: #4879ad;">
+                <div class="card-body">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Автор:</strong> @topic.UserName
+                            <strong>Назва теми:</strong> @topic.Title
+                        </div>
+                        <p class="card-text"><strong>Moment:</strong> @topic.CreatedAtTopic</p>
+                    </div>
+                    <img class="card-img-top" src="/uploads/@topic.PhotoFileName" alt="Card image cap" style="margin-right: 10px;">
+                </div>
+                <div class="card-body">
+                    <strong>Опис:</strong> @topic.Description
+                </div>
+                @foreach (var topicMessages in Model.SelectMany(feedback => feedback.Messages).OrderByDescending(t => t.CreatedAtMessage))
+                {
+                    @if (topic.Id == topicMessages.Id)
+                    {
+                        <div class="card mb-3  text-white" style="border-radius: 20px; background: #160a38;">
+                            <div class="card-body">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div>
+                                    <strong>Автор:</strong> @topicMessages.UserName
+                                    <strong>Комментар:</strong> @topicMessages.Message
+                                </div>
+                                <p class="card-text"><strong>Moment:</strong> @topicMessages.CreatedAtMessage</p>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    }
+
+                }
+                @if (Context.User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="card mt-3 text-white" style="background: #4879ad;" >
+                        <div class="card mb-3  text-white" style="background: #4879ad;">
+                        <form asp-action="AddComment" enctype="multipart/form-data" method="post">
+                            <input type="hidden" name="topicId" value="@topic.Id"> <!-- Передайте ідентифікатор теми -->
+                            <div class="form-group">
+                                <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                                    <button type="submit" class="btn btn-primary" >Додати коментар  </button>
+                            </div>                           
+                        </form>
+                    </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card mt-3">
+                        <div class="card mb-3 4879ad text-white" style="background: #4879ad;">
+                            <form asp-action="AddComment" enctype="multipart/form-data" method="post">
+                                <input type="hidden" name="topicId" value="@topic.Id"> <!-- Передайте ідентифікатор теми -->
+                                <div class="form-group">
+                                    <textarea class="form-control" id="comment" name="comment" rows="1" disabled></textarea>
+                                    <button type="submit" class="btn btn-primary" disabled>Додати коментар  </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                }
+            </div>
+            
+        }
+        
+    }
+</div>
+

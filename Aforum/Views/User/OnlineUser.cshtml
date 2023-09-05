@@ -1,0 +1,53 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Aforum.Models.User
+@using System.Security.Claims;
+@{
+    ViewData["Title"] = "OnlineUser";
+    bool isAuthenticated = User.Identity?.IsAuthenticated == true;
+
+    var httpContext = HttpContextAccessor.HttpContext; // Отримання доступу до HttpContext
+    var authUserId = httpContext?.Session.GetString("AuthUserId"); // Отримання значення AuthUserId з сесії
+
+    
+}
+@if (Context.User.Identity?.IsAuthenticated == true)
+{
+ <div>
+        <h2 class="display-4">Online</h2>
+</div>
+}
+else
+{<div>
+        <h2 class="display-4">Offline</h2>
+</div>
+}
+<div class="card mb-3  text-white" style="border-radius: 20px; background: #4879ad;">
+    <div class="card-body">
+        <p class="card-text"><strong>Is User Authenticated:</strong> @isAuthenticated</p>
+        <p class="card-text"><strong>AuthUserId from Session::</strong> @authUserId</p>
+        @if (Context.User.Identity?.IsAuthenticated == true)
+        {
+            string? loginClaimType = "LoginClaim";//  власний ідентифікатор клейм
+            String? Login =
+            Context.User.Claims
+            .FirstOrDefault(c => c.Type == loginClaimType)
+            ?.Value;
+            <p class="card-text"><strong>AuthUserId from Session Login:</strong> @Login</p>
+
+            String? Email =
+            Context.User.Claims
+            .FirstOrDefault(c => c.Type == ClaimTypes.Email)
+            ?.Value;
+            <p class="card-text"><strong>AuthUserId from Session Email:</strong> @Email</p>
+
+            String? realname =
+            Context.User.Claims
+            .FirstOrDefault(c => c.Type == ClaimTypes.Name)
+            ?.Value;
+            <p class="card-text"><strong>AuthUserId from Session realname:</strong> @realname</p>
+        }
+
+    </div>
+</div>
+
+

@@ -1,0 +1,126 @@
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Aforum</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Aforum.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" style=" color: #501ce0;" asp-area="" asp-controller="Home" asp-action="Index">
+                    Welcome to AForum
+                    <img src="/uploads/11.jpg" alt="Ava" class="rounded-circle" style="max-width: 40px; margin-right: 10px;font-size:1.7rem;" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" >
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link " style=" color: #501ce0;" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " style=" color: #501ce0;" asp-area="" asp-controller="User" asp-action="OnlineUser">Online user info</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            @if (Context.User.Identity?.IsAuthenticated == true)
+                {
+                <a asp-controller="User" asp-action="Topic" title="ChangeProfile">
+                    <i class=" bi bi-window-plus"
+                       style="font-size:1.7rem; margin-right: 10px;"></i>
+                </a>
+                <a asp-controller="User" asp-action="ChangeProfile" title="ChangeProfile">
+                    <i class=" bi bi-arrow-down-up"
+                       style="font-size:1.7rem; margin-right: 10px;"></i>
+                </a>
+                String? avatar =
+                Context.User.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.UserData)
+                ?.Value;
+
+                <img src="/uploads/@avatar" alt="Ava" class="rounded-circle" style="max-width: 40px; margin-right: 10px;" />
+                
+                    <!-- Sign Out button -->
+                    <form asp-controller="User" asp-action="SignOut" method="post" class="d-inline  ">
+                        <button type="submit" class="btn btn-outline-danger  ">Вихід</button>
+                    </form>
+                }
+                else
+                {
+                <!-- Button trigger modal -->
+                <i class="bi-person-lock mx-3"
+                   data-bs-toggle="modal"
+                   data-bs-target="#signinModal"
+                   style="font-size:1.7rem; color: #501ce0;"
+                   role="button"
+                   title="Вхід до системи"></i>
+
+                <a asp-controller="User" asp-action="SignUp"
+                   title="Реєстрація">
+                    <i class="bi-person-add mx-3"
+                       style="font-size:1.7rem; color: #501ce0;"></i>
+                </a>
+                }
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - Aforum - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <!-- Modal -->
+    <div class="modal fade" id="signinModal" tabindex="-1" aria-labelledby="signinModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signinModalLabel">Вхід до системи</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text py-0 px-2"
+                              id="signin-login-addon"><i class="bi-person fs-bi"></i></span>
+                        <input type="text" class="form-control"
+                               id="signin-login" name="signin-login"
+                               placeholder="Введіть логін"
+                               aria-describedby="signin-login-addon">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text py-0 px-2"
+                              id="signin-password-addon"><i class="bi-lock fs-bi"></i></span>
+                        <input type="password" class="form-control"
+                               id="signin-password" name="signin-password"
+                               placeholder="Введіть пароль"
+                               aria-describedby="signin-password-addon">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+                    <button type="button" class="btn btn-primary" id="signin-button">Вхід</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

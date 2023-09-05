@@ -1,0 +1,34 @@
+﻿@model Aforum.Models.User.ChangeProfileModel
+@{
+    ViewData["Title"] = "ChangeProfile";
+}
+
+<div>
+    <h1 class="display-4">Зміна данних користувача</h1>
+</div>
+@if (ViewData["form"] != null)
+{ 
+    <div class="alert alert-danger" role="alert">@ViewData["form"]</div>
+}
+
+<div class="row">
+    <div class="col col-8">
+        <form asp-action="ChangeProfile" method="post" enctype="multipart/form-data">
+            <div class="input-group mb-3">
+                <span class="input-group-text py-0 px-2" id="new-name-addon">
+                    <i class="bi bi-database-fill-gear"></i>
+                </span>
+                <input type="text" class="form-control" id="new-name" name="new-name" placeholder="Введіть нове і'мя" aria-describedby="new-name-addon">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text py-0 px-2" id="new-password-addon">
+                    <i class="bi bi-database-fill-gear"></i>
+                </span>
+                <input type="text" class="form-control" id="new-password" name="new-password" placeholder="Введіть поточний пароль" aria-describedby="new-password-addon">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-secondary">Змінити</button>
+            </div>
+        </form>
+    </div>
+</div>
